@@ -35,6 +35,11 @@ variable "volume_type" {
   default = "gp3"
   }
 
+variable "key_name" {
+  type = string
+  default = ""
+}
+
 
 //variable "subnet_id" {
 //  type = string

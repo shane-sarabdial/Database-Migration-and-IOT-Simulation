@@ -10,7 +10,7 @@ terraform {
 resource "aws_security_group" "ec2_iot_security_group" {
   name        = var.ec2_iot_security_group_name
   description = "self referencing sg on port 3306 and 443"
-//  vpc_id = var.vpc_id
+  vpc_id = var.vpc_id
   ingress {
     from_port = 3306
     protocol = "TCP"

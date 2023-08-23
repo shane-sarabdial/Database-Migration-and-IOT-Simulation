@@ -25,10 +25,14 @@ module "roles" {
   kinesis_arn = module.kinesis_firehose.kinesis_arn
 }
 
+module "vpc" {
+  source = "./module/Default_VPC"
+}
+
 module "sg" {
   source = "./module/Security_Groups"
   ec2_iot_security_group_name = "mysql_sg_3306_443"
-//  vpc_id = module.VPC.vpc_id
+  vpc_id = module.vpc.vpc_id
 }
 
 module "servers" {
@@ -38,7 +42,7 @@ module "servers" {
   instance_type         = "t2.micro"
   instance_profile_name = module.roles.instance_profile_name
   sg_id = module.sg.security_group_name
-//  subnet_id = module.VPC.subnet_ids
+  subnet_id = module.vpc.subnet_id
 }
 
 module "IOT_Bucket" {
@@ -73,4 +77,15 @@ module "IOT" {
   rule_name = "TopicRule"
   kinesis_stream_name = module.kinesis_firehose.kinesis_stream_name
   role_arn = module.roles.iot-kinesis_arn
+}
+
+//module "servers" {
+//  source                = "./module/Server"
+//  server_name           = "Windows_Bastion_Host"
+//  ami                   = "ami-09301a37d119fe4c5"
+//  instance_type         = "t2.medium"
+//  instance_profile_name = module.roles.instance_profile_name
+//  sg_id = module.sg.security_group_name
+//  key_name = "bastion_host_key"
+//  subnet_id = module.VPC.subnet_ids
 }

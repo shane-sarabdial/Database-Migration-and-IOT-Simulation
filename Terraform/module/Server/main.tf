@@ -27,13 +27,14 @@ resource "aws_instance" "server" {
               sudo systemctl enable mariadb
               EOF
   vpc_security_group_ids = [var.sg_id]
-//  subnet_id = var.subnet_id
+  subnet_id = var.subnet_id
   root_block_device {
     volume_size = var.volume_size
     volume_type = var.volume_type
     encrypted = true
     delete_on_termination = false
   }
+  key_name = var.key_name
   tags = {
     Name = "${var.server_name}"
   }
