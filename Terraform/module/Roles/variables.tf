@@ -34,3 +34,7 @@ variable "kinesis_arn" {
   type = string
   description = "kinesis firehose arn"
 }
+
+variable "dms_name" {
+  type = string
+}

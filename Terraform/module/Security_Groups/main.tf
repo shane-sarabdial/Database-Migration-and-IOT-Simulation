@@ -23,6 +23,12 @@ resource "aws_security_group" "ec2_iot_security_group" {
     to_port = 443
     self = true
   }
+  ingress {
+    from_port = 5432
+    protocol = "TCP"
+    to_port = 5432
+    self = true
+  }
 
   egress {
     from_port = 0

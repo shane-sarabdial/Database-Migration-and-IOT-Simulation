@@ -40,8 +40,11 @@ variable "key_name" {
   default = ""
 }
 
+variable "subnet_id" {
+  type = string
+  description = "subnet ids of VPC"
+}
 
-//variable "subnet_id" {
-//  type = string
-//  description = "subnet ids of VPC"
-//}
+variable "user_data" {
+  default = ""
+}

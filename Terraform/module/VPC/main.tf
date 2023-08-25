@@ -24,7 +24,6 @@ resource "aws_vpc_endpoint" "sceret_endpoint" {
   subnet_ids = [aws_subnet.private_subnet.id]
   vpc_endpoint_type = "Interface"
   tags = {Name = "secret_manager"}
-  private_dns_enabled = true
 }
 
 resource "aws_vpc_endpoint" "s3_endpoint" {

@@ -23,6 +23,7 @@ module "roles" {
   firehose_lambda_role_name = "o2-arena-lambda-firehouse"
   iot_firehose_name = "o2-arena-lambda-firehose-iot"
   kinesis_arn = module.kinesis_firehose.kinesis_arn
+  dms_name = "DMS-S3"
 }
 
 module "vpc" {
@@ -33,16 +34,6 @@ module "sg" {
   source = "./module/Security_Groups"
   ec2_iot_security_group_name = "mysql_sg_3306_443"
   vpc_id = module.vpc.vpc_id
-}
-
-module "servers" {
-  source                = "./module/Server"
-  server_name           = "IOT"
-  ami                   = "ami-08a52ddb321b32a8c"
-  instance_type         = "t2.micro"
-  instance_profile_name = module.roles.instance_profile_name
-  sg_id = module.sg.security_group_name
-  subnet_id = module.vpc.subnet_id
 }
 
 module "IOT_Bucket" {
@@ -58,7 +49,7 @@ module "lambda" {
   security_group_id = module.sg.security_group_id
   function_name = "o2-arena-lambda-firehose"
   secrets_dir = "prod/db/mysql-onprem-o2arena-db-x"
-  subnet_id = module.servers.subnet_id
+  subnet_id = module.vpc.subnet_id
 }
 
 module "kinesis_firehose" {
@@ -79,13 +70,42 @@ module "IOT" {
   role_arn = module.roles.iot-kinesis_arn
 }
 
-//module "servers" {
-//  source                = "./module/Server"
-//  server_name           = "Windows_Bastion_Host"
-//  ami                   = "ami-09301a37d119fe4c5"
-//  instance_type         = "t2.medium"
-//  instance_profile_name = module.roles.instance_profile_name
-//  sg_id = module.sg.security_group_name
-//  key_name = "bastion_host_key"
-//  subnet_id = module.VPC.subnet_ids
+
+data "template_file" "user_data" {
+  template = file("${path.module}/user_data_script.sh")
 }
+
+module "servers" {
+  source                = "./module/Server"
+  for_each = local.server_instances
+  server_name           = each.value["server_name"]
+  ami                   = each.value["ami"]
+  instance_type         = each.value["instance_type"]
+  instance_profile_name = each.value["instance_profile_name"]
+  user_data = each.value["user_data"]
+  volume_size = each.value["volume_size"]
+  sg_id = each.value["sg_id"]
+  subnet_id = each.value["subnet_id"]
+  key_name = each.value["key_name"]
+}
+
+module "RDS" {
+  source = "./module/RDS"
+  identifier = "o2-arena-pgsql-db"
+  engine_version = "14.6"
+  engine = "aurora-postgresql"
+  db_name = "o2_arena_pgsql_db"
+  final_snapshot = true
+  az = ["us-east-1a"]
+  security_group_id = module.sg.security_group_id
+  password = "password123"
+  min_cap = 2
+  max_cap = 4
+}
+
+module "Timestream" {
+  source = "./module/Timestream_DB"
+  database_name = "o2-arena-timestream-db"
+  table_name = "o2-arena-motion-events"
+}
+

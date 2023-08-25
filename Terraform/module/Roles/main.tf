@@ -294,5 +294,30 @@ resource "aws_iam_policy_attachment" "firehose_policy_attachment" {
   depends_on = [aws_iam_role.o2-arena-lambda-firehose-iot]
 }
 
+resource "aws_iam_role" "DMS_role" {
+  name = var.dms_name
+  description = "gives full access to s3"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "dms.amazonaws.com",
+        },
+      },
+    ],
+  })
+}
 
 
+data "aws_iam_policy" "s3_full_access" {
+  arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "DMS_S3" {
+  policy_arn = data.aws_iam_policy.s3_full_access.arn
+  role = aws_iam_role.DMS_role.name
+}
