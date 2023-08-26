@@ -34,3 +34,4 @@ override.tf.json
 terraform.rc
 
 bastion_host_key.pem
+.$Project Architecture.drawio.bkp

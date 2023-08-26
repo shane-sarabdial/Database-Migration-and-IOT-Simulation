@@ -1,6 +1,5 @@
 # Database-Migration-and-IOT-Simulation
 
-
 In this endeavor, I have undertaken the simulation of a database migration utilizing Amazon Web Services (AWS), coupled with the implementation of Terraform as the chosen Infrastructure as Code (IaC) toolset. The primary objective has been the seamless deployment and orchestration of various critical services, including but not limited to Kinesis Firehose, Amazon S3, AWS Lambda, Amazon EC2 instances, MySQL and PostgreSQL databases, AWS Glue, and Amazon Athena.
 
 The contextual backdrop involves a scenario wherein a multitude of IoT sensors is actively generating substantial volumes of data. The fundamental requirement is the establishment of a robust data pipeline that not only efficiently ingests this continuous data stream but also diligently adheres to the highest standards of security practices. Moreover, the devised solution places paramount importance on resilience in the face of potential operational setbacks.
@@ -11,5 +10,14 @@ Of equal significance is the security aspect of this project. Given the sensitiv
 
 Below is an architecture design I created to adhere to these policies.
 
-
 ![ProjectArchitecture_final.jpg](./assets/Project%20Architecture_final.jpg)
+
+[Database Migration Simulation Using Terraform - YouTube](https://www.youtube.com/watch?v=ULLxzHs7FII&t=2s)
+
+## Resources:
+
+Download Iot Cloudformation Template : [IoT Device Simulator | AWS Solutions (amazon.com)](https://aws.amazon.com/solutions/implementations/iot-device-simulator/)
+
+AWS Schema Conversion Tool (SCT): [Installing, verifying, and updating AWS SCT - AWS Schema Conversion Tool (amazon.com)](https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_Installing.html)
+
+AWS Session Manager Plugin : [Install the Session Manager plugin for the AWS CLI - AWS Systems Manager (amazon.com)](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
